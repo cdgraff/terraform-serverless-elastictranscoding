@@ -19,7 +19,7 @@ module "sns_topic" {
   source = "./modules/sns"
   sns_topic_name = "${var.product}-${var.environment}-${var.sns_topic_name}"
   sns_subscription_protocol = "${var.sns_subscription_protocol}"
-  sns_subscription_endpoint = "${var.sns_subscription_endpoint}"
+  sns_subscription_endpoint = "${module.sqs_queue.arn}"
 }
 
 module "s3_bucket" {
@@ -40,4 +40,9 @@ module "elastictranscoder_pipeline" {
   s3_thumbs_out_bucket_name = "${var.product}-${var.environment}-${var.s3_thumbs_out_bucket_name}"
   elastictranscoder_pipeline_name = "${var.product}-${var.environment}-${var.elastictranscoder_pipeline_name}"
   iam_role_arn = "${module.iam_role.arn}"
+}
+
+module "sqs_queue" {
+  source = "./modules/sqs"
+  sqs_name = "${var.product}-${var.environment}-${var.sqs_name}"
 }
